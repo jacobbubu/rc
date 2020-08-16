@@ -56,6 +56,8 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: run-${{ matrix.test_number }}
+          parallel: true
 
   release:
     name: npm publish / GitHub release
@@ -89,6 +91,17 @@ jobs:
       - name: Build
         if: success()
         run: npm run build
+
+      - name: Test
+        if: success()
+        run: npm run test:prod
+
+      - name: Coveralls Finished
+        if: success()
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
 
         # npm run test:prod && npm run build && npm run report-coverage
       - name: Semantic Release
