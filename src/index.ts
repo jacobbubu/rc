@@ -12,7 +12,7 @@ const home = win ? process.env.USERPROFILE : process.env.HOME
 export type ParseFunc = typeof cc.parse
 export type ConfigType = Record<string, any>
 
-export interface RelayStream {
+export interface RC {
   addListener(
     event: 'changed',
     listener: (newConfig: ConfigType, oldConfig: ConfigType) => void
@@ -76,7 +76,7 @@ export class RC extends EventEmitter {
 
     const newConfig = deepMerge.all(all)
     if (!equal(newConfig, this._mergedConfig)) {
-      this.emit('changed', newConfig, this._mergedConfig)
+      this.emit('changed', newConfig, this._mergedConfig!)
       this._mergedConfig = newConfig
     }
 
